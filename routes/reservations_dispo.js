@@ -35,7 +35,7 @@ router.get('/:id', auth, (req, res) => {
 
 //create reservation_dispo
 
-router.post('/add', auth, (req, res) => {
+router.post('/add/day', auth, (req, res) => {
     const {
         product_id,
         date_arrivee,
@@ -54,6 +54,107 @@ router.post('/add', auth, (req, res) => {
         newReservationDispo.save()
                            .then(() => res.status(201).json({message: "Created"}))
                            .catch((err) => res.status(400).json({message: err}));
+    }
+})
+
+router.post('/add/hour', auth, (req, res) => {
+    const {
+        product_id,
+        date_arrivee,
+        date_depart,
+        day,
+    } = req.body;
+
+    if (!product_id || !date_arrivee || !date_depart || !day) {
+        res.status(400).json({message: "Veuillez entrer toutes les champes"});
+    } else {
+        const newReservationDispo = new Reservation_dispo({
+            product_id,
+            date_arrivee,
+            date_depart,
+            day,
+        });
+
+        newReservationDispo.save()
+                           .then(() => res.status(201).json({message: "Created"}))
+                           .catch((err) => res.status(400).json({message: err}));
+    }
+})
+
+//verifying if a reservations is already here 
+
+router.post('/verify/day', auth, (req, res) => {
+    const {
+        product_id,
+        date_depart,
+        date_arrivee,
+    } = req.body;
+
+    if (!product_id || !date_depart || !date_arrivee) {
+        res.status(400).json({message: "Veuillez entrer toutes les champs"})
+    } else {
+        Reservation_dispo.find({product_id: product_id})
+                         .then((reservations) => {
+                             if (reservations) {
+                                 reservations.forEach((reservation) => {
+                                    if (
+                                        reservation.date_arrivee === date_arrivee 
+                                        || 
+                                        reservation.date_arrivee < date_depart
+                                        ||
+                                        (date_arrivee < reservation.date_arrivee && date_depart > reservation.date_arrivee)
+                                        ) {
+                                        res.status(400).json({message: "Not dispo"}).end();
+                                    }
+                                 })
+                                 res.status(200).json({message: "Dispo"});
+                             } else {
+                                 res.status(200).json({message: "Dispo"});
+                             }
+                         })
+                         .catch((err) => {
+                             res.status(400).json({message: err});
+                         })
+    }
+
+})
+
+router.post('/verify/hour', auth, (req, res) => {
+    const {
+        day,
+        product_id,
+        date_depart,
+        date_arrivee,
+    } = req.body;
+    if (!day || !product_id || !date_arrivee || !date_depart) {
+        res.status(400).json({message: "Veuillez entrer toutes les champs"})
+    } else {
+        Reservation_dispo.find({product_id: product_id})
+                         .then((reservations) => {
+                             if (reservations) {
+                                 reservations.forEach((reservation) => {
+                                    if (day === reservation.day) {
+                                        if (
+                                            reservation.date_arrivee === date_arrivee 
+                                            || 
+                                            reservation.date_arrivee < date_depart
+                                            ||
+                                            (date_arrivee < reservation.date_arrivee && date_depart > reservation.date_arrivee)
+                                            ) {
+                                            res.status(400).json({message: "Not dispo"}).end();
+                                        }
+                                        res.status(200).json({message: "Dispo"});
+                                    } else {
+                                        res.status(200).json({message: 'Dispo'}).end();
+                                    }
+                                })
+                             } else {
+                                 res.status(200).json({message: "Dispo"});
+                             }
+                         })
+                         .catch((err) => {
+                             res.status(400).json({message: err});
+                         })
     }
 })
 

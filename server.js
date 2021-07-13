@@ -15,7 +15,7 @@ const PORT = process.nextTick.PORT || 3001;
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use("/usersImage", express.static("./uploads/usersImage"));
-app.use('productsImage', express.static("./uploads/productsImage"));
+app.use('/productsImage', express.static("./uploads/productsImage"));
 app.use((req, res, next) => {
     res.set("Access-Control-Allow-Origin", "*");
     res.set(

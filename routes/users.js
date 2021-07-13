@@ -55,7 +55,7 @@ router.get('/all', (req, res) => {
 
 router.get('/:id', (req, res) => {
     User.findById(req.params.id)
-        .then((user) => res.status(400).json(user))
+        .then((user) => res.status(200).json(user))
         .catch((err) => res.status(400).json(err));
 })
 

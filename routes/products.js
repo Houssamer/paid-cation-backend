@@ -42,7 +42,7 @@ const Product = new mongoose.model('Product', Products);
 
 router.get('/all', (req, res) => {
     Product.find()
-            .then((products) => res.json(products))
+            .then((products) => res.status(200).json(products))
             .catch((err) => res.status(400).json({message: err}));
 });
 
@@ -50,7 +50,7 @@ router.get('/all', (req, res) => {
 
 router.get('/:id', (req, res) => {
     Product.findById(req.params.id)
-            .then(((product) => res.json(product)))
+            .then(((product) => res.status(200).json(product)))
             .catch((err) => res.status(400).json({message: err}));
 });
 
@@ -115,7 +115,7 @@ router.post('/add/image/:id', auth, upload.array('multi-files-add'), (req, res) 
     } else {
         Product.findByIdAndUpdate(req.params.id, {images: images}, {new: true})
                 .then(() => res.status(201).json({message: "ajoutée"}))
-                .catch((err) => res.status(400).json({error: err}));
+                .catch((err) => res.status(400).json({message: err}));
     }
 
 
@@ -153,6 +153,9 @@ router.post('/update/:id', auth, (req, res) => {
                 ville,
                 description,
                 rate
+            },
+            {
+                new: true
             }
         )
         .then(() => res.status(202).json({message: "Updated"}))
@@ -160,18 +163,16 @@ router.post('/update/:id', auth, (req, res) => {
     }
 })
 
-router.post('/update/image/:id', auth, upload.array('multi-files-update', 7), (req, res) => {
-    const images = req.files.map((file) => {
-        'http://localhost:3001/productsImage' + file.filename;
-    });
+router.post('/update/image/:id', auth, upload.array('multi-files-update'), (req, res) => {
+    const images = req.files.map((file) => "http://localhost:3001/productsImage/" + file.filename);
 
     if (!images) {
         res.status(400).json({message: "Veuillez entrer au moins une image"});
     } else {
 
-        Product.findByIdAndUpdate(req.params.id, {images: images})
+        Product.findByIdAndUpdate(req.params.id, { $push: {images: images}}, {new: true})
                 .then(() => res.status(200).json({message: "updated"}))
-                .catch((err) => res.status(400).json({error: err}));
+                .catch((err) => res.status(400).json({message: err}));
     }
 })
 

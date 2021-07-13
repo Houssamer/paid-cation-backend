@@ -33,14 +33,26 @@ const reservationSchema = new mongoose.Schema({
         type: Date,
         required: true,
     },
-    date_arrviee: {
+    date_arrivee: {
         type: Date,
         required: true,
     },
     day: {
         type: Date,
         required: false,
-    }
+    }, 
+    image: {
+        type: String,
+        required: true,
+    },
+    num: {
+        type: String,
+        required: true,
+    },
+    email: {
+        type: String,
+        required: true,
+    },
 
 });
 

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 
-const reservation_dispoSchema = new mongoose.Schema({
+const reservationDispoSchema = new mongoose.Schema({
     product_id: {
         type: String,
         required: true,
@@ -13,7 +13,11 @@ const reservation_dispoSchema = new mongoose.Schema({
     date_arrivee: {
         type: Date,
         required: true,
+    },
+    day: {
+        type: Date,
+        required: false
     }
 });
 
-export default reservation_dispoSchema;
+export default reservationDispoSchema;

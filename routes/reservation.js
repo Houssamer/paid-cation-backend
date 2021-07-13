@@ -45,28 +45,34 @@ router.get('/product/:id', auth, (req, res) => {
 
 router.post('/add/day', auth, (req, res) => {
     const {
-        arrivee, 
-        depart, 
+        date_arrivee, 
+        date_depart, 
         nombreMembres, 
         price,
         user_id,
         product_id,
         owner_id,
         duree,
+        image,
+        num,
+        email,
     } = req.body;
 
-    if (!arrivee || !depart || !nombreMembres || !price || !user_id || !product_id || !owner_id || !duree) {
+    if (!date_arrivee || !date_depart || !nombreMembres || !price || !user_id || !product_id || !owner_id || !duree || !image || !num || !email) {
         res.status(400).json({message: "Veuillez entrer toutes les champs"});
     } else {
         const newReservation = new Reservation({
-            arrivee,
-            depart,
+            date_arrivee,
+            date_depart,
             nombreMembres,
             price,
             user_id,
             product_id,
             owner_id,
             duree,
+            image,
+            num,
+            email,
         });
 
         newReservation.save()
@@ -80,29 +86,35 @@ router.post('/add/day', auth, (req, res) => {
 router.post('/add/hour', auth, (req, res) => {
     const {
         day,
-        arrivee,
-        depart,
+        date_arrivee,
+        date_depart,
         nombreMembres,
         price,
         user_id,
         product_id,
         owner_id,
         duree,
+        image,
+        num,
+        email,
     } = req.body;
 
-    if (!day || !arrivee || !depart || !nombreMembres || !price || !user_id || !product_id || !owner_id || !duree) {
+    if (!day || !date_arrivee || !date_depart || !nombreMembres || !price || !user_id || !product_id || !owner_id || !duree || !num || !email || !image) {
         res.status(400).json({message: "Veuillez entrer toutes les champs"});
     } else {
         const newReservation = new Reservation({
             day,
-            arrivee,
-            depart,
+            date_arrivee,
+            date_depart,
             nombreMembres,
             price,
             user_id,
             product_id,
             owner_id,
             duree,
+            image, 
+            num,
+            email,
         });
 
         newReservation.save()
