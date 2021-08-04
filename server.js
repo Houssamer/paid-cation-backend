@@ -14,6 +14,7 @@ const PORT = process.nextTick.PORT || 3001;
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
+app.use(express.static('./public'));
 app.use("/usersImage", express.static("./uploads/usersImage"));
 app.use('/productsImage', express.static("./uploads/productsImage"));
 app.use((req, res, next) => {
@@ -33,7 +34,7 @@ app.use('/api/reservations/dispo', reservationDsipoRoute);
 //setting up the database
 
 mongoose
-    .connect("mongodb://localhost:27017/paid_cation", {
+    .connect("mongodb://mongo:27017/paid_cation", {
         useNewUrlParser: true,
         useCreateIndex: true,
         useUnifiedTopology: true,
