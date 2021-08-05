@@ -1,0 +1,1 @@
+export const secretJWT = "paid_cation_projet--secretString";
