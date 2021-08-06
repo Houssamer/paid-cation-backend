@@ -34,7 +34,7 @@ app.use('/api/reservations/dispo', reservationDsipoRoute);
 //setting up the database
 
 mongoose
-    .connect("mongodb://mongo:27017/paid_cation", {
+    .connect("mongodb://localhost:27017/paid_cation", {
         useNewUrlParser: true,
         useCreateIndex: true,
         useUnifiedTopology: true,
